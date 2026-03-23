@@ -1,12 +1,17 @@
 package u03
 
 import u03.Optionals.Optional
+import u03.Sequences.Person.Teacher
 
 object Sequences: // Essentially, generic linkedlists
   
   enum Sequence[E]:
     case Cons(head: E, tail: Sequence[E])
     case Nil()
+
+  enum Person:
+    case Student(name: String, year: Int)
+    case Teacher(name: String, course: String)
 
   object Sequence:
 
@@ -167,6 +172,50 @@ object Sequences: // Essentially, generic linkedlists
       case _ => (s, s)
 
     }
+
+
+    /* ex. 1 */
+
+    def teacherCourses(s: Sequence[Person]): Sequence[String] = {
+      //SOLUZIONE CON FILTER + MAP
+      val onlyTeachers = filter(s)(p => p match {
+        case Person.Teacher(_,_) => true
+        case _ => false
+      })
+      //n.b. non c'è bisogno di "p => p match (si può fare come sotto)
+      //ma lo tengo per ricordarmi a cosa si riferisce
+
+      map(onlyTeachers) {
+        case Person.Teacher(_, course) => course
+        case _ => ""
+      }
+
+
+      //SOLUZIONE CON FLATMAP
+      /*flatMap(s)(p => p match {
+        case Person.Teacher(_, course) => Cons(course, Nil())
+        case Person.Student(_, _) => Nil()
+      })*/
+    }
+
+    /* ex. 2 */
+
+    def foldLeft[A, B](list: Sequence[A])(default: B)(op: (B,A) => B) : B = list match {
+      case Cons(h, t) => foldLeft(t)(op(default,h))(op)
+      case Nil() => default
+    }
+
+    /* ex. 3 */
+
+    def getNumberOfCourses(s: Sequence[Person]) : Int = {
+      val onlyTeachers = filter(s) {
+        case Person.Teacher(_,_) => true
+        case _ => false
+      }
+      val onlyOnes = map(onlyTeachers)(onlyTeachers => 1)
+      foldLeft(onlyOnes)(0)(_ + _)
+    }
+
 
 @main def trySequences =
   import Sequences.* 

@@ -10,6 +10,11 @@ class SequenceTest:
 
   val sequence: Sequence[Int] = Cons(10, Cons(20, Cons(30, Nil())))
 
+  val people: Sequence[Person] = Cons(Person.Teacher("Bianchi", "Matematica"),
+    Cons(Person.Student("Francesca", 2022),
+      Cons(Person.Teacher("Rossi", "Italiano"),
+        Cons(Person.Student("Luca", 2020), Nil()))))
+
   @Test def testSum() =
     assertEquals(0, sum(Nil()))
     assertEquals(60, sum(sequence))
@@ -84,3 +89,21 @@ class SequenceTest:
     val (evenEmpty, oddEmpty) = partition(emptySequence)(x => true)
     assertEquals(Nil(), evenEmpty)
     assertEquals(Nil(), oddEmpty)
+
+  @Test def testGetCourses() =
+    val expected: Sequence[String] = Cons("Matematica", Cons("Italiano", Nil()))
+    assertEquals(expected, teacherCourses(people))
+
+
+  @Test def testFoldLeft() =
+    val lst = Cons(3, Cons(7, Cons(1, Cons(5, Nil()))))
+    assertEquals(-16, foldLeft(lst)(0)(_ - _))
+
+  @Test def testNumberOfCourses() =
+    val zeroCourses: Sequence[Person] = Cons(Person.Student("Francesca", 2022),
+                                          Cons(Person.Student("Giovanni", 2012),
+                                            Cons(Person.Student("Paolo", 2021),
+                                              Cons(Person.Student("Lucia", 2025), Nil()))))
+
+    assertEquals(2, getNumberOfCourses(people))
+    assertEquals(0, getNumberOfCourses(zeroCourses))
