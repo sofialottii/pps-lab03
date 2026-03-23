@@ -37,6 +37,26 @@ object Streams extends App :
     def iterate[A](init: => A)(next: A => A): Stream[A] =
       cons(init, iterate(next(init))(next))
 
+    /* ex. 6 */
+
+    def takeWhile[A](stream: Stream[A])(pred: A => Boolean) : Stream[A] = stream match {
+      case Cons(head, tail) if (pred(head())) => cons(head(), takeWhile(tail())(pred))
+      case _ => Empty()
+    }
+
+    def fill[A](n: Int)(k: A) : Stream[A] = n match {
+      case 0 => Empty()
+      case _ => cons(k, fill(n-1)(k))
+    }
+
+    val fibonacci: Stream[Int] = {
+      def fib(a: Int, b: Int): Stream[Int] = cons(a, fib(b, a+b))
+
+      fib(0, 1)
+    }
+
+
+
   end Stream
 
 @main def tryStreams =
