@@ -44,16 +44,46 @@ object Streams extends App :
       case _ => Empty()
     }
 
+    /* ex. 7 */
+
     def fill[A](n: Int)(k: A) : Stream[A] = n match {
       case 0 => Empty()
       case _ => cons(k, fill(n-1)(k))
     }
+
+    /* ex. 8 */
 
     val fibonacci: Stream[Int] = {
       def fib(a: Int, b: Int): Stream[Int] = cons(a, fib(b, a+b))
 
       fib(0, 1)
     }
+
+    /* ex. 9 */
+
+    def interleave[A](s1: Stream[A], s2: Stream[A]) : Stream[A] = s1 match {
+      case Cons(head, tail) => cons(head(), interleave(s2, tail()))
+      case _ => s2
+
+      /* //versione iniziale con (s1, s2) match
+      case (Cons(h1, t1), _) => cons(h1(), interleave(s2, t1()))
+      case (_, Cons(h2, t2)) => cons(h2(), interleave(s1, t2()))
+      case _ => Empty()
+      */
+    }
+
+    /* ex. 10 */
+
+    def cycle[A](lst: Sequence[A]) : Stream[A] = {
+      
+      def helperLoop(current: Sequence[A]) : Stream[A] = current match {
+        case Sequence.Cons(h,t) => cons(h, helperLoop(t))
+        case _ => helperLoop(lst)
+      }
+      
+      helperLoop(lst)
+    }
+
 
 
 
