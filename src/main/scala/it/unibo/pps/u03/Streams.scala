@@ -74,14 +74,17 @@ object Streams extends App :
 
     /* ex. 10 */
 
-    def cycle[A](lst: Sequence[A]) : Stream[A] = {
+    def cycle[A](lst: Sequence[A]) : Stream[A] = lst match {
+
+      case Sequence.Nil() => empty()
+      case _ => 
       
-      def helperLoop(current: Sequence[A]) : Stream[A] = current match {
-        case Sequence.Cons(h,t) => cons(h, helperLoop(t))
-        case _ => helperLoop(lst)
-      }
-      
-      helperLoop(lst)
+        def helperLoop(current: Sequence[A]) : Stream[A] = current match {
+          case Sequence.Cons(h,t) => cons(h, helperLoop(t))
+          case _ => helperLoop(lst)
+        }
+        
+        helperLoop(lst)
     }
 
 

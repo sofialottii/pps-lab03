@@ -182,8 +182,8 @@ object Sequences: // Essentially, generic linkedlists
         case Person.Teacher(_,_) => true
         case _ => false
       })
-      //n.b. non c'è bisogno di "p => p match (si può fare come sotto)
-      //ma lo tengo per ricordarmi a cosa si riferisce
+      //non c'è bisogno di "p => p match (si può fare come sotto)
+      //ma lo tengo come esempio iniziale per ricordarmi
 
       map(onlyTeachers) {
         case Person.Teacher(_, course) => course
